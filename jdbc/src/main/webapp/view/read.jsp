@@ -32,8 +32,10 @@
     <textarea class ="form-control" id="description" rows="3" name="description" readonly>${todo.description}</textarea>
   </div>
   <div>
-    <a href='modifyPro.jsp?no=${todo.no}' class="btn btn-primary">수정</a>
-    <a href='<c:url value="/view/list.jsp" />' class="btn btn-success">목록</a>
+    <%-- <a href='modifyPro.jsp?no=${todo.no}' class="btn btn-primary">수정</a> --%>
+    <a href='<c:url value="/modify?no=${todo.no}" />' class="btn btn-primary">수정</a>
+    <%-- <a href='<c:url value="/view/list.jsp" />' class="btn btn-success">목록</a> --%>
+    <a href='<c:url value="/list" />' class="btn btn-success">목록</a>
   </div>
  </form>
 <%@ include file = "../include/footer.jsp" %>
