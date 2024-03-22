@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import action.Action;
 import action.ActionForward;
+import action.ToDoCreateAction;
+import action.ToDoDeleteAction;
 import action.ToDoListAction;
+import action.ToDoReadAction;
+import action.ToDoUpdateAction;
 import dao.ToDoDao;
 import dto.ToDoDto;
 import service.ToDoService;
@@ -26,8 +30,6 @@ public class ToDoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
-        ToDoDao dao = new ToDoDao();
-        ToDoService service = new ToDoServiceImpl();
         Action action = null;
 
         // 경로에서 요청 찾기
@@ -41,72 +43,21 @@ public class ToDoServlet extends HttpServlet {
 
         // System.out.println("requestUri " + requestUri);
         // System.out.println("contextPath " + contextPath);
-        // System.out.println("cmd " + cmd);
+        System.out.println("cmd " + cmd);
 
         if (cmd.equals("/list.do")) {
             action = new ToDoListAction("/view/list.jsp");
         } else if (cmd.equals("/read.do")) {
-            String no = req.getParameter("no");
-
-            // DB 작업
-            ToDoDto todo = service.getRow(no);
-
-            // todo 를 read.jsp 에 보여주기
-            req.setAttribute("todo", todo);
-
-            // RequestDispatcher rd = req.getRequestDispatcher("/view/read.jsp");
-            // rd.forward(req, resp);
+            action = new ToDoReadAction("/view/read.jsp");
         } else if (cmd.equals("/modify.do")) {
-            String no = req.getParameter("no");
-
-            // DB 작업
-            ToDoDto todo = service.getRow(no);
-
-            // todo 를 modify.jsp 에 보여주기
-            req.setAttribute("todo", todo);
-
-            // RequestDispatcher rd = req.getRequestDispatcher("/view/modify.jsp");
-            // rd.forward(req, resp);
+            // read.do와 경로 빼고 다 같아서 같은 클래스 사용가능
+            action = new ToDoReadAction("/view/modify.jsp");
         } else if (cmd.equals("/update.do")) {
-            String no = req.getParameter("no");
-            String description = req.getParameter("description");
-
-            // checkbox, radio에 value 가 없는 경우 on 값을 가지고 오게 되기 때문에 값을 "true"로 설정해야 함
-            String completed = req.getParameter("completed");
-
-            // DB 작업
-            ToDoDto dto = new ToDoDto();
-            dto.setNo(Integer.parseInt(no));
-            dto.setCompleted(Boolean.parseBoolean(completed));
-            dto.setDescription(description);
-
-            boolean result = service.update(dto);
-
-            // 화면 이동(list)
-            // resp.sendRedirect("list.do");
+            action = new ToDoUpdateAction("/list.do");
         } else if (cmd.equals("/delete.do")) {
-            String no = req.getParameter("no");
-
-            // DB 작업
-            boolean result = service.delete(no);
-
-            // 화면 이동(list)
-            // resp.sendRedirect("list.do");
+            action = new ToDoDeleteAction("/list.do");
         } else if (cmd.equals("/create.do")) {
-            String title = req.getParameter("title");
-            String description = req.getParameter("description");
-
-            // DB 작업
-            // DB 연동 1) Dao 클래스의 함수를 쓸 수 있게 가져오기
-            ToDoDto insertDto = new ToDoDto();
-            insertDto.setTitle(title);
-            insertDto.setDescription(description);
-
-            int result = dao.insert(insertDto);
-
-            // 화면 이동(list.jsp)
-            // resp.sendRedirect("list.do");
-
+            action = new ToDoCreateAction("/list.do");
         }
 
         ActionForward af = null;
