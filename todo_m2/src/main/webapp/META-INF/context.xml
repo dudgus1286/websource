@@ -1,4 +1,4 @@
-<Context docBase="web1" path="" reloadable="true">
+<Context docBase="todo_m2" path="" reloadable="true">
 <!-- meta-inf에 저장소 만들고 이름 지정해서 찾아오게 하기 -->
 <Resource name="jdbc/myoracle" auth="Container"
               type="javax.sql.DataSource" driverClassName="oracle.jdbc.OracleDriver"

@@ -8,8 +8,6 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const code = document.querySelector("input#code");
-  const title = document.querySelector("input#title");
-  const writer = document.querySelector("input#writer");
   const price = document.querySelector("input#price");
 
   //   if (code.value && title.value && writer.value && price.value) {
@@ -21,16 +19,8 @@ form.addEventListener("submit", (e) => {
     alert("code 값이 비어있거나 값이 4자리의 숫자가 아닙니다.");
     code.focus();
     return;
-  } else if (!title.value) {
-    alert("title 값이 비어있습니다.");
-    title.focus();
-    return;
-  } else if (!writer.value) {
-    alert("writer 값이 비어있습니다.");
-    writer.focus();
-    return;
   } else if (!price.value || isNaN(price.value)) {
-    alert("price 값이 비어있습니다.");
+    alert("price 값이 비어있거나 숫자가 아닙니다.");
     price.focus();
     return;
   }
