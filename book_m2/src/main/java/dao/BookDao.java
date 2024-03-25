@@ -1,5 +1,6 @@
 package dao;
 
+import java.lang.reflect.Member;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +14,8 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import dto.BookDto;
+import dto.ChangeDto;
+import dto.MemberDto;
 
 public class BookDao {
     private Connection con;
@@ -204,6 +207,87 @@ public class BookDao {
             pstmt.setInt(1, code);
             result = pstmt.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(con, pstmt);
+        }
+        return result;
+    }
+
+    // Member 작업
+    public MemberDto isLogin(MemberDto loginDto) {
+        // 로그인
+        MemberDto dto = null;
+        con = getConnection();
+        String sql = "select * from membertbl where userid= ? and password= ?";
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, loginDto.getUserid());
+            pstmt.setString(2, loginDto.getPassword());
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                dto = new MemberDto();
+                dto.setUserid(rs.getString("userid"));
+                dto.setName(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(con, pstmt, rs);
+        }
+        return dto;
+    }
+
+    public int passwordChange(ChangeDto changeDto) {
+        // 비밀번호
+        int result = 0;
+        con = getConnection();
+        String sql = "update membertbl set password= ? where userid= ?";
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, changeDto.getNewPassword());
+            pstmt.setString(2, changeDto.getUserid());
+            result = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(con, pstmt);
+        }
+        return result;
+    }
+
+    public int register(MemberDto insertDto) {
+        // 회원가입
+        int result = 0;
+        con = getConnection();
+        String sql = "insert into membertbl(userid,password,name,email) values(?,?,?,?)";
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, insertDto.getUserid());
+            pstmt.setString(2, insertDto.getPassword());
+            pstmt.setString(3, insertDto.getName());
+            pstmt.setString(4, insertDto.getEmail());
+            result = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(con, pstmt);
+        }
+        return result;
+    }
+
+    public int leave(MemberDto leaveDto) {
+        int result = 0;
+        con = getConnection();
+        String sql = "delete from membertbl where userid = ? and password = ?";
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, leaveDto.getUserid());
+            pstmt.setString(2, leaveDto.getPassword());
+            result = pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
