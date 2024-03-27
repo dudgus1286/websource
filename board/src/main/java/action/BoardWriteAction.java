@@ -45,7 +45,7 @@ public class BoardWriteAction implements Action {
             // uuid 를 설정하지 않고 업로드한 파일 이름이 중복되면 덮어쓰기 됨
 
             part.write(uploadFile.toString());
-            insertDto.setAttach(fileName);
+            insertDto.setAttach(uploadFile.getName());
         }
 
         System.out.println(insertDto);

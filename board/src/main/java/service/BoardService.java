@@ -10,4 +10,10 @@ public interface BoardService {
     public boolean insert(BoardDto insertDto);
 
     public BoardDto read(int bno);
+
+    public boolean update(BoardDto updateDto);
+
+    public boolean delete(BoardDto deleteDto);
+
+    public boolean reply(BoardDto replyDto);
 }

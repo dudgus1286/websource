@@ -31,7 +31,7 @@
 				<div class="form-group  row">
 					<label for="filename" class="col-sm-2 col-form-label">파일첨부</label>
 					<div class="col-sm-10">
-
+					<a href='<c:url value="/view/download.jsp?fileName=${dto.attach}"/>'>${dto.attach}</a>
 					</div>
 				</div>
 				<div style="height:10px"></div>
@@ -46,4 +46,10 @@
 		</form>
 	</div>
 </section>
+<script>
+	// 1) read.js 파일에서 값을 부르기 위해 먼저 변수에 담음
+	const bno = ${dto.bno};
+</script>
+<%-- 2) read.js 파일 불러옴 --%>
+<script src='<c:url value ="/js/read.js" />'></script>
 <%@include file="../include/footer.jsp"%>
